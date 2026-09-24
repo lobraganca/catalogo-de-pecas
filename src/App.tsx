@@ -113,7 +113,7 @@ export function App() {
 
       <main className="conteudo">
         <header className="cabecalho">
-          <h1>CONSULTA DE PEÇAS AMARILDO BRAGANÇA</h1>
+          <h1>Consulta de Peças - Amarildo Bragança</h1>
           <p>Digite o código ou o nome do componente.</p>
         </header>
 

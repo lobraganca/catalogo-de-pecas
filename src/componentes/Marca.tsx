@@ -19,7 +19,7 @@ export function Marca({ total }: { total: number }) {
       <div>
         <p className="marca-nome">Consulta de Peças - Amarildo Bragança</p>
         <p className="marca-versao">
-          v1.0.0{total > 0 && ` · ${total.toLocaleString("pt-BR")} peças`}
+          v{__VERSAO__}{total > 0 && ` · ${total.toLocaleString("pt-BR")} peças`}
         </p>
       </div>
     </div>

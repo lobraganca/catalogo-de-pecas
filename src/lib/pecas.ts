@@ -99,3 +99,13 @@ export function listarGrupos(pecas: Peca[]): Grupo[] {
     .map(([nome, quantidade]) => ({ nome, quantidade }))
     .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
 }
+
+// Identidade de uma peça para os favoritos. Não pode ser só o código: 42
+// códigos aparecem em mais de um sistema, e marcar o 12014 de Implemento
+// marcaria junto o de Motor Diesel. Nem a posição na lista: ela muda quando
+// a lista for corrigida, e o favorito passaria a apontar para outra peça.
+// Se o nome da peça for corrigido, aquele favorito se perde — melhor que
+// apontar para a peça errada.
+export function chaveDaPeca(p: Peca): string {
+  return `${p.codigo}|${p.sistema}|${p.componente}`;
+}

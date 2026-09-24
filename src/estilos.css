@@ -37,6 +37,7 @@
   --danger-border: #fecaca;
   --danger-text: #991b1b;
   --danger: #dc2626;
+  --warning: #ff8f57;
 
   --fonte: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
@@ -196,7 +197,10 @@ select {
 
 .menu-item:focus-visible,
 .botao:focus-visible,
-.campo-limpar:focus-visible {
+.campo-botao:focus-visible,
+.estrela:focus-visible,
+.ficha:focus-visible,
+.botao-texto:focus-visible {
   outline: 2px solid var(--primary-600);
   outline-offset: 2px;
 }
@@ -276,7 +280,16 @@ select {
 }
 
 .campo input {
-  padding: 0 48px 0 50px;
+  padding: 0 16px 0 50px;
+}
+
+/* Espaço à direita para os botões de dentro do campo (limpar e microfone). */
+.campo-caixa[data-botoes="1"] input {
+  padding-right: 56px;
+}
+
+.campo-caixa[data-botoes="2"] input {
+  padding-right: 100px;
 }
 
 /*
@@ -323,13 +336,18 @@ select {
   box-shadow: 0 0 0 3px rgb(15 132 204 / 0.15);
 }
 
-.campo-limpar {
+.campo-acoes {
   position: absolute;
   right: 8px;
+  display: flex;
+  gap: 4px;
+}
+
+.campo-botao {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border: 0;
   border-radius: var(--raio-md);
   background: none;
@@ -337,14 +355,57 @@ select {
   cursor: pointer;
 }
 
-.campo-limpar:hover {
+.campo-botao:hover {
   background: var(--neutral-100);
   color: var(--neutral-900);
 }
 
-.campo-limpar svg {
-  width: 18px;
-  height: 18px;
+.campo-botao svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* O microfone tem a cor da marca: é um botão de ação, não de apoio. */
+.campo-voz {
+  color: var(--primary-950);
+  background: var(--neutral-100);
+}
+
+.campo-voz svg {
+  width: 22px;
+  height: 22px;
+}
+
+/*
+ * Ouvindo: fundo vermelho pulsando. Tem de ser impossível não perceber
+ * que o celular está gravando — senão ele fala com o aparelho parado, ou
+ * acha que está parado e o aparelho segue ouvindo a oficina.
+ */
+.campo-voz-ouvindo,
+.campo-voz-ouvindo:hover {
+  background: var(--danger);
+  color: var(--neutral-0);
+  animation: pulsar 1.2s ease-in-out infinite;
+}
+
+@keyframes pulsar {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(220 38 38 / 0.45); }
+  50% { box-shadow: 0 0 0 8px rgb(220 38 38 / 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .campo-voz-ouvindo { animation: none; }
+}
+
+.voz-aviso {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+  color: var(--info-text);
+}
+
+.voz-aviso-erro {
+  color: var(--danger-text);
 }
 
 /* Na tela larga o filtro é o menu lateral. */
@@ -357,7 +418,113 @@ select {
 .resultados {
   display: flex;
   flex-direction: column;
+  gap: var(--space-6);
+}
+
+.lista-principal,
+.secao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.lista-principal {
   gap: var(--space-4);
+}
+
+.secao-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 28px;
+}
+
+/* Mesmo título de grupo do menu: versalete, 11px, espaçado. */
+.secao-titulo {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--neutral-400);
+}
+
+/* Botão "ghost" do padrão, para a ação terciária de limpar o histórico. */
+.botao-texto {
+  height: 28px;
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--raio-sm);
+  background: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--neutral-600);
+  cursor: pointer;
+}
+
+.botao-texto:hover {
+  background: var(--neutral-100);
+  color: var(--neutral-900);
+}
+
+.fichas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* As últimas buscas: pílulas do padrão, altas o bastante para o dedo. */
+.ficha {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 var(--space-4) 0 var(--space-3);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--raio-pilula);
+  background: var(--neutral-0);
+  color: var(--primary-950);
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.ficha:hover {
+  border-color: var(--neutral-300);
+  background: var(--neutral-50);
+}
+
+.ficha svg {
+  width: 16px;
+  height: 16px;
+  color: var(--neutral-400);
+}
+
+.dica {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--neutral-500);
+}
+
+.dica-estrela svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  color: var(--neutral-400);
+}
+
+.so-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .contagem,
@@ -426,6 +593,44 @@ select {
 
 .col-sistema {
   width: 34%;
+}
+
+.tabela .col-favorito {
+  width: 56px;
+  padding: var(--space-1) var(--space-2);
+  text-align: right;
+}
+
+/*
+ * A estrela: vazia e discreta até ser marcada; cheia e laranja (o
+ * "warning" do padrão, a única cor quente da paleta) depois. Alvo de 44px,
+ * porque dedo de mecânico não acerta um ícone de 20.
+ */
+.estrela {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--raio-md);
+  background: none;
+  color: var(--neutral-300);
+  cursor: pointer;
+}
+
+.estrela:hover {
+  background: var(--neutral-100);
+  color: var(--neutral-500);
+}
+
+.estrela-ativa,
+.estrela-ativa:hover {
+  color: var(--warning);
+}
+
+.estrela svg {
+  width: 24px;
+  height: 24px;
 }
 
 /* A etiqueta do sistema usa as cores do botão "Secundário" do padrão. */
@@ -628,10 +833,10 @@ mark {
 
   .tabela tbody tr {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas:
-      "codigo componente"
-      "codigo sistema";
+      "codigo componente favorito"
+      "codigo sistema favorito";
     column-gap: var(--space-4);
     row-gap: var(--space-1);
     align-items: center;
@@ -666,6 +871,12 @@ mark {
 
   .col-sistema {
     grid-area: sistema;
+  }
+
+  .tabela .col-favorito {
+    grid-area: favorito;
+    padding: 0;
+    margin-right: calc(var(--space-2) * -1);
   }
 
   .etiqueta {

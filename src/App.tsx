@@ -1,9 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { carregarPecas, listarGrupos, type Peca } from "./lib/pecas";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { carregarPecas, chaveDaPeca, listarGrupos, type Peca } from "./lib/pecas";
 import { buscar, codigoRepetido, palavrasDaBusca } from "./lib/busca";
+import { useListaGuardada } from "./lib/guardado";
+import { normalizar } from "./lib/texto";
+import { useVoz } from "./lib/voz";
 import { Alerta } from "./componentes/Alerta";
-import { Destaque } from "./componentes/Destaque";
 import { Marca } from "./componentes/Marca";
+import { IconeEstrela, TabelaDePecas } from "./componentes/TabelaDePecas";
+import { UltimasBuscas } from "./componentes/UltimasBuscas";
 
 type Estado =
   | { tipo: "carregando" }
@@ -11,6 +15,12 @@ type Estado =
   | { tipo: "pronto"; pecas: Peca[] };
 
 const TODOS = "";
+const MAXIMO_DE_BUSCAS_GUARDADAS = 8;
+
+// Quanto tempo uma busca precisa ficar parada, com resultado, para entrar
+// nas últimas buscas. A busca acontece a cada tecla; sem esta espera,
+// digitar "bomba" guardaria "b", "bo", "bom" e "bomb".
+const ESPERA_PARA_GUARDAR_BUSCA = 1500;
 
 // A busca e o sistema escolhido vão para o endereço da página
 // (?q=3006&sistema=FREIO). Assim um link mandado no WhatsApp já abre com a
@@ -35,7 +45,16 @@ export function App() {
   const [termo, setTermo] = useState(inicial.termo);
   const [grupo, setGrupo] = useState(inicial.grupo);
   const [tentativa, setTentativa] = useState(0);
+  const [favoritosGuardados, setFavoritosGuardados] = useListaGuardada("pecas:favoritos:v1");
+  const [ultimas, setUltimas] = useListaGuardada("pecas:ultimas-buscas:v1");
   const campo = useRef<HTMLInputElement>(null);
+
+  const voz = useVoz((texto, final) => {
+    setTermo(texto);
+    // Terminou de falar: fecha o teclado, se estiver aberto, para os
+    // resultados ocuparem a tela.
+    if (final) campo.current?.blur();
+  });
 
   useEffect(() => {
     let vivo = true;
@@ -83,12 +102,57 @@ export function App() {
   const numeros = palavras.filter((p) => /^\d+$/.test(p));
   const letras = palavras.filter((p) => !/^\d+$/.test(p));
 
+  // ---------- Favoritos ----------
+
+  const favoritos = useMemo(() => new Set(favoritosGuardados), [favoritosGuardados]);
+  const alternarFavorito = useCallback(
+    (p: Peca) => {
+      const chave = chaveDaPeca(p);
+      setFavoritosGuardados((atual) =>
+        atual.includes(chave) ? atual.filter((c) => c !== chave) : [...atual, chave],
+      );
+    },
+    [setFavoritosGuardados],
+  );
+  // Na ordem da folha, e respeitando o sistema escolhido no filtro.
+  const favoritasVisiveis = useMemo(
+    () => doGrupo.filter((p) => favoritos.has(chaveDaPeca(p))),
+    [doGrupo, favoritos],
+  );
+
+  // ---------- Últimas buscas ----------
+
+  const buscando = termo.trim() !== "";
+  useEffect(() => {
+    const t = termo.trim();
+    if (t.length < 2 || resultados.length === 0) return;
+    const espera = window.setTimeout(() => {
+      const novo = normalizar(t);
+      setUltimas((atual) => [
+        t,
+        // Sai a mesma busca escrita de outro jeito ("Cuíca" e "cuica"), e
+        // sai também o começo dela: quem parou em "bomba" e depois
+        // completou "bomba agua" queria a segunda.
+        ...atual.filter((b) => {
+          const velho = normalizar(b);
+          return velho !== novo && !novo.startsWith(velho);
+        }),
+      ].slice(0, MAXIMO_DE_BUSCAS_GUARDADAS));
+    }, ESPERA_PARA_GUARDAR_BUSCA);
+    return () => window.clearTimeout(espera);
+  }, [termo, resultados, setUltimas]);
+
+  // ---------- Ações ----------
+
   const limpar = () => {
     setTermo("");
+    voz.esquecerAviso();
     campo.current?.focus();
   };
 
   const verTodos = () => setGrupo(TODOS);
+
+  const botoesNoCampo = (termo ? 1 : 0) + (voz.disponivel ? 1 : 0);
 
   return (
     <div className="app">
@@ -114,7 +178,7 @@ export function App() {
       <main className="conteudo">
         <header className="cabecalho">
           <h1>Consulta de Peças - Amarildo Bragança</h1>
-          <p>Digite o código ou o nome do componente.</p>
+          <p>Digite ou fale o código ou o nome do componente.</p>
         </header>
 
         <form
@@ -129,7 +193,7 @@ export function App() {
         >
           <div className="campo campo-termo">
             <label htmlFor="termo">Código ou nome da peça</label>
-            <div className="campo-caixa">
+            <div className="campo-caixa" data-botoes={botoesNoCampo}>
               <svg className="campo-lupa" viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
                 <path d="m20 20-3.5-3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -139,23 +203,53 @@ export function App() {
                 id="termo"
                 type="search"
                 value={termo}
-                onChange={(e) => setTermo(e.target.value)}
+                onChange={(e) => {
+                  setTermo(e.target.value);
+                  voz.esquecerAviso();
+                }}
                 onKeyDown={(e) => e.key === "Escape" && limpar()}
-                placeholder="Ex.: 3006 ou cuíca"
+                placeholder={voz.ouvindo ? "Pode falar…" : "Ex.: 3006 ou cuíca"}
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck={false}
                 enterKeyHint="search"
                 autoFocus
               />
-              {termo && (
-                <button type="button" className="campo-limpar" onClick={limpar} aria-label="Limpar busca">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                </button>
-              )}
+              <div className="campo-acoes">
+                {termo && (
+                  <button type="button" className="campo-botao" onClick={limpar} aria-label="Limpar busca">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                )}
+                {voz.disponivel && (
+                  <button
+                    type="button"
+                    className={`campo-botao campo-voz${voz.ouvindo ? " campo-voz-ouvindo" : ""}`}
+                    onClick={voz.alternar}
+                    aria-label={voz.ouvindo ? "Parar de ouvir" : "Buscar por voz"}
+                    aria-pressed={voz.ouvindo}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" strokeWidth="2" />
+                      <path
+                        d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
+            {(voz.ouvindo || voz.aviso) && (
+              <p className={`voz-aviso${voz.aviso && !voz.ouvindo ? " voz-aviso-erro" : ""}`} role="status">
+                {voz.ouvindo ? "Ouvindo… fale o código ou o nome da peça." : voz.aviso}
+              </p>
+            )}
           </div>
 
           {estado.tipo === "pronto" && (
@@ -189,78 +283,97 @@ export function App() {
         )}
 
         {estado.tipo === "pronto" && (
-          <section className="resultados" aria-live="polite">
-            <p className="contagem">
-              {contagem(resultados.length, termo.trim() !== "")}
-              {grupo && (
-                <>
-                  {" em "}
-                  <strong>{grupo}</strong>
-                </>
-              )}
-            </p>
+          <div className="resultados">
+            {!buscando && (
+              <>
+                <UltimasBuscas buscas={ultimas} escolher={setTermo} limpar={() => setUltimas([])} />
 
-            {repetidos.length > 0 && (
-              <Alerta tipo="info" titulo={`O código ${repetidos[0].codigo} aparece em ${repetidos.length} lugares da lista`}>
-                <p>Confira pelo sistema qual é o seu: {juntar(repetidos.map((p) => `${p.componente} (${p.sistema})`))}.</p>
-              </Alerta>
-            )}
-
-            {resultados.length === 0 ? (
-              <Alerta tipo="info" titulo="Nenhuma peça encontrada">
-                <p>
-                  {nosOutros > 0
-                    ? `Não há nada em ${grupo}, mas ${nosOutros === 1 ? "há 1 peça" : `há ${nosOutros} peças`} em outros sistemas.`
-                    : "Confira o número, ou tente uma palavra só — por exemplo, bomba."}
-                </p>
-                {nosOutros > 0 && (
-                  <button type="button" className="botao botao-primario" onClick={verTodos}>
-                    Buscar em todos os sistemas
-                  </button>
+                {favoritasVisiveis.length > 0 ? (
+                  <section className="secao" aria-label="Favoritos">
+                    <div className="secao-topo">
+                      <p className="secao-titulo">
+                        Favoritos{grupo && ` em ${grupo}`} · {favoritasVisiveis.length}
+                      </p>
+                    </div>
+                    <TabelaDePecas
+                      pecas={favoritasVisiveis}
+                      numeros={[]}
+                      letras={[]}
+                      favoritos={favoritos}
+                      alternarFavorito={alternarFavorito}
+                      rotulo="Favoritos"
+                    />
+                  </section>
+                ) : (
+                  <p className="dica">
+                    <span className="dica-estrela">
+                      <IconeEstrela cheia={false} />
+                    </span>
+                    Toque na estrela de uma peça para ela aparecer aqui em cima, sempre à mão.
+                  </p>
                 )}
-              </Alerta>
-            ) : (
-              <div className="cartao-tabela">
-                <table className="tabela">
-                  <thead>
-                    <tr>
-                      <th scope="col">Código</th>
-                      <th scope="col">Componente</th>
-                      <th scope="col">Sistema funcional</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {resultados.map((p) => (
-                      <tr key={p.ordem}>
-                        <td className="col-codigo">
-                          <Destaque texto={p.codigo} palavras={numeros} soNoInicio />
-                        </td>
-                        <td className="col-componente">
-                          <Destaque texto={p.componente} palavras={letras} />
-                        </td>
-                        <td className="col-sistema">
-                          <span className="etiqueta">
-                            <Destaque texto={p.sistema || "—"} palavras={letras} />
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              </>
             )}
 
-            {resultados.length > 0 && nosOutros > 0 && (
-              <div className="rodape-resultados">
-                <span>
-                  {nosOutros === 1 ? "Mais 1 peça" : `Mais ${nosOutros} peças`} com essa busca em outros sistemas.
-                </span>
-                <button type="button" className="botao botao-secundario" onClick={verTodos}>
-                  Ver em todos
-                </button>
-              </div>
-            )}
-          </section>
+            <section className="lista-principal" aria-label="Resultados">
+              <p className="contagem" aria-live="polite">
+                {contagem(resultados.length, buscando)}
+                {grupo && (
+                  <>
+                    {" em "}
+                    <strong>{grupo}</strong>
+                  </>
+                )}
+              </p>
+
+              {repetidos.length > 0 && (
+                <Alerta
+                  tipo="info"
+                  titulo={`O código ${repetidos[0].codigo} aparece em ${repetidos.length} lugares da lista`}
+                >
+                  <p>
+                    Confira pelo sistema qual é o seu:{" "}
+                    {juntar(repetidos.map((p) => `${p.componente} (${p.sistema})`))}.
+                  </p>
+                </Alerta>
+              )}
+
+              {resultados.length === 0 ? (
+                <Alerta tipo="info" titulo="Nenhuma peça encontrada">
+                  <p>
+                    {nosOutros > 0
+                      ? `Não há nada em ${grupo}, mas ${nosOutros === 1 ? "há 1 peça" : `há ${nosOutros} peças`} em outros sistemas.`
+                      : "Confira o número, ou tente uma palavra só — por exemplo, bomba."}
+                  </p>
+                  {nosOutros > 0 && (
+                    <button type="button" className="botao botao-primario" onClick={verTodos}>
+                      Buscar em todos os sistemas
+                    </button>
+                  )}
+                </Alerta>
+              ) : (
+                <TabelaDePecas
+                  pecas={resultados}
+                  numeros={numeros}
+                  letras={letras}
+                  favoritos={favoritos}
+                  alternarFavorito={alternarFavorito}
+                  rotulo="Peças"
+                />
+              )}
+
+              {resultados.length > 0 && nosOutros > 0 && (
+                <div className="rodape-resultados">
+                  <span>
+                    {nosOutros === 1 ? "Mais 1 peça" : `Mais ${nosOutros} peças`} com essa busca em outros sistemas.
+                  </span>
+                  <button type="button" className="botao botao-secundario" onClick={verTodos}>
+                    Ver em todos
+                  </button>
+                </div>
+              )}
+            </section>
+          </div>
         )}
       </main>
     </div>

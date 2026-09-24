@@ -1,6 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+import { readFileSync } from "node:fs";
+
+const versao: string = JSON.parse(readFileSync("package.json", "utf8")).version;
 
 // No GitHub Pages o site mora em /catalogo-de-pecas/, e não na raiz do
 // domínio. Sem isto a página abre EM BRANCO: o navegador pede
@@ -11,6 +14,9 @@ const base = process.env.BASE_PATH ?? "/";
 
 export default defineConfig({
   base,
+  define: {
+    __VERSAO__: JSON.stringify(versao),
+  },
   plugins: [
     react(),
     // O app fica guardado no celular depois da primeira visita, e abre

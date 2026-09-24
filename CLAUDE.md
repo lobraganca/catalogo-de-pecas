@@ -21,6 +21,25 @@ nenhum projeto".
   primeira visita. O csv está na lista de arquivos guardados; tirar de lá
   faz o app abrir offline com erro.
 
+## Voz, favoritos e últimas buscas (v1.1.0)
+
+- **Voz** (`src/lib/voz.ts`): API de fala do navegador, `pt-BR`. Chrome
+  novo tem `SpeechRecognition` SEM prefixo, e o app usa esse antes do
+  `webkitSpeechRecognition` — teste que troque só o `webkit` testa o
+  reconhecedor de verdade, não o falso. `limparFala` tira "código",
+  "a peça" e o separador de milhar ("3.006" → "3006").
+- **Favoritos**: chave `codigo|sistema|componente` (`chaveDaPeca`), nunca
+  só o código — ver "Código não é único" abaixo.
+- **Últimas buscas**: entra a busca que fica 1,5 s parada COM resultado.
+  Sai o começo de uma busca mais completa ("bomba" some quando vem
+  "bomba agua").
+- Os dois em `localStorage` (`pecas:favoritos:v1`,
+  `pecas:ultimas-buscas:v1`), sempre em try/catch.
+- Testar voz com Playwright: o `setState` vindo de fora do React não
+  aparece na tela no mesmo instante. Esperar um pouco depois de cada
+  "fala" simulada, senão o teste lê o campo antigo e acusa defeito que
+  não existe (aconteceu).
+
 ## Os dados têm pegadinhas reais
 
 - **Código não é único.** 42 códigos aparecem em mais de um sistema, e 3

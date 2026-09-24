@@ -5,6 +5,11 @@ com o dedo na folha impressa. Feito para usar no celular, na oficina.
 
 - Um campo só: digitar `3006` ou `cuíca` dá no mesmo lugar.
 - Não precisa de acento, nem de maiúscula.
+- **Busca por voz:** toque no microfone e fale o código ou o nome. Precisa
+  de internet (quem entende a fala são os servidores do Google/Apple).
+- **Favoritos:** a estrela de cada peça. As marcadas aparecem no topo
+  quando o campo está vazio.
+- **Últimas buscas:** as oito mais recentes, para repetir com um toque.
 - Filtro por sistema (Freio, Elétrico, Trem de Força…).
 - **Funciona sem internet** depois da primeira vez que abre.
 - Dá para pôr na tela inicial do celular, como um aplicativo
@@ -55,6 +60,10 @@ O que foi corrigido em relação ao papel:
 | FAROL AUXÍLIAR DE RÉ | FAROL AUXILIAR DE RÉ | grafia |
 | TAMPA (TANQUE DE EXPANSÃO)) | TAMPA (TANQUE DE EXPANSÃO) | parêntese sobrando |
 | sistemas ELETRICO / TREM DE FORCA / HIDRAULICO | ELÉTRICO / TREM DE FORÇA / HIDRÁULICO | a folha escreve dos dois jeitos; sem unificar, o filtro teria dois "Elétrico" |
+
+Favoritos e últimas buscas ficam guardados **no próprio celular**, não
+num servidor. Não passam de um aparelho para outro, e "limpar dados do
+navegador" apaga os dois.
 
 ## Onde está no ar
 

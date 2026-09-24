@@ -1,0 +1,653 @@
+/*
+ * Tokens do padrão visual de referência (paleta, tipografia, espaçamento e
+ * raio), copiados do documento com os mesmos nomes — para que conferir uma
+ * cor contra o PDF seja procurar o nome, e não comparar hexadecimais.
+ */
+:root {
+  --primary-600: #0f84cc;
+  --primary-700: #0c68a3;
+  --primary-800: #0a4f7d;
+  --primary-900: #073a5c;
+  --primary-950: #395a86;
+  --primary-1000: #213943;
+
+  --neutral-0: #ffffff;
+  --neutral-50: #f8fafc;
+  --neutral-100: #f1f5f9;
+  --neutral-200: #e2e8f0;
+  --neutral-300: #cbd5e1;
+  --neutral-400: #94a3b8;
+  --neutral-500: #64748b;
+  --neutral-600: #475569;
+  --neutral-700: #334155;
+  --neutral-800: #1e293b;
+  --neutral-900: #0f172a;
+  --neutral-950: #020617;
+
+  --info-bg: #eff6ff;
+  --info-border: #bfdbfe;
+  --info-text: #1e40af;
+  --success-bg: #f0fdf4;
+  --success-border: #bbf7d0;
+  --success-text: #166534;
+  --warning-bg: #fff1eb;
+  --warning-border: #ffc9ad;
+  --warning-text: #993300;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+  --danger-text: #991b1b;
+  --danger: #dc2626;
+
+  --fonte: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --raio-sm: 6px;
+  --raio-md: 8px;
+  --raio-lg: 12px;
+  --raio-xl: 16px;
+  --raio-pilula: 999px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fonte);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--neutral-700);
+  background: var(--neutral-50);
+  -webkit-font-smoothing: antialiased;
+}
+
+p {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* ---------- Estrutura: menu à esquerda, conteúdo à direita ---------- */
+
+.app {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.menu {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  overflow-y: auto;
+  padding: var(--space-8) var(--space-4) var(--space-6);
+  background: var(--neutral-0);
+  border-right: 1px solid var(--neutral-200);
+}
+
+.conteudo {
+  width: 100%;
+  max-width: 1040px;
+  padding: var(--space-10) var(--space-12) var(--space-12);
+}
+
+/* ---------- Marca ---------- */
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-3);
+  margin-bottom: var(--space-8);
+}
+
+.marca-logo {
+  width: 36px;
+  height: 36px;
+  flex: none;
+}
+
+.marca-nome {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--neutral-900);
+}
+
+.marca-versao {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--neutral-400);
+}
+
+/* ---------- Menu ---------- */
+
+.menu-titulo {
+  padding: 0 var(--space-3);
+  margin-bottom: var(--space-2);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--neutral-400);
+}
+
+/* A área de toque ocupa a largura toda, e não só o texto. */
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 34px;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--raio-md);
+  background: none;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: left;
+  color: var(--neutral-600);
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: var(--neutral-50);
+  color: var(--neutral-900);
+}
+
+/* A cor sozinha não basta para marcar o ativo: fundo + cor + peso. */
+.menu-item-ativo,
+.menu-item-ativo:hover {
+  background: var(--neutral-100);
+  color: var(--primary-700);
+  font-weight: 600;
+}
+
+.menu-quantidade {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--neutral-400);
+  font-variant-numeric: tabular-nums;
+}
+
+.menu-item:focus-visible,
+.botao:focus-visible,
+.campo-limpar:focus-visible {
+  outline: 2px solid var(--primary-600);
+  outline-offset: 2px;
+}
+
+/* ---------- Cabeçalho ---------- */
+
+.cabecalho h1 {
+  margin: 0 0 var(--space-2);
+  font-size: 30px;
+  line-height: 38px;
+  font-weight: 700;
+  color: var(--neutral-900);
+  letter-spacing: -0.01em;
+}
+
+.cabecalho p {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--neutral-600);
+}
+
+/* ---------- Formulário de busca ---------- */
+
+.busca {
+  display: flex;
+  gap: var(--space-4);
+  margin: var(--space-8) 0 var(--space-6);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.campo-termo {
+  flex: 1;
+}
+
+.campo label {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--neutral-700);
+}
+
+.campo-caixa {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.campo-lupa {
+  position: absolute;
+  left: 14px;
+  width: 20px;
+  height: 20px;
+  color: var(--neutral-400);
+  pointer-events: none;
+}
+
+/*
+ * 16px e não os 14px da base do padrão: no iPhone, campo com letra menor
+ * que 16px faz a página inteira dar zoom ao tocar, e ela não volta sozinha.
+ */
+.campo input,
+.campo select {
+  width: 100%;
+  height: 48px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--neutral-900);
+  background: var(--neutral-0);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--raio-md);
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+
+.campo input {
+  padding: 0 44px 0 44px;
+}
+
+.campo input::placeholder {
+  color: var(--neutral-400);
+}
+
+/* O "x" que o navegador põe sozinho no campo de busca duplicaria o nosso. */
+.campo input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.campo select {
+  padding: 0 var(--space-3);
+  cursor: pointer;
+}
+
+.campo input:focus,
+.campo select:focus {
+  outline: none;
+  border-color: var(--primary-600);
+  box-shadow: 0 0 0 3px rgb(15 132 204 / 0.15);
+}
+
+.campo-limpar {
+  position: absolute;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--raio-md);
+  background: none;
+  color: var(--neutral-500);
+  cursor: pointer;
+}
+
+.campo-limpar:hover {
+  background: var(--neutral-100);
+  color: var(--neutral-900);
+}
+
+.campo-limpar svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Na tela larga o filtro é o menu lateral. */
+.campo-sistema {
+  display: none;
+}
+
+/* ---------- Resultados ---------- */
+
+.resultados {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.contagem,
+.aviso-discreto {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--neutral-500);
+}
+
+.contagem strong {
+  color: var(--neutral-700);
+  font-weight: 600;
+}
+
+.cartao-tabela {
+  background: var(--neutral-0);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--raio-lg);
+  overflow: hidden;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela th {
+  padding: var(--space-3) var(--space-4);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--neutral-400);
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+.tabela td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--neutral-200);
+  vertical-align: middle;
+}
+
+.tabela tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabela tbody tr:hover {
+  background: var(--neutral-50);
+}
+
+.col-codigo {
+  width: 110px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  color: var(--neutral-900);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.col-componente {
+  color: var(--neutral-900);
+}
+
+.col-sistema {
+  width: 34%;
+}
+
+/* A etiqueta do sistema usa as cores do botão "Secundário" do padrão. */
+.etiqueta {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--raio-pilula);
+  background: var(--neutral-100);
+  color: var(--primary-950);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 600;
+}
+
+mark {
+  background: var(--info-border);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+.rodape-resultados {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--neutral-600);
+}
+
+/* ---------- Alertas ---------- */
+
+.alerta {
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid;
+  border-radius: var(--raio-lg);
+}
+
+.alerta-titulo {
+  font-weight: 600;
+}
+
+.alerta-texto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.alerta-info { background: var(--info-bg); border-color: var(--info-border); color: var(--info-text); }
+.alerta-success { background: var(--success-bg); border-color: var(--success-border); color: var(--success-text); }
+.alerta-warning { background: var(--warning-bg); border-color: var(--warning-border); color: var(--warning-text); }
+.alerta-danger { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-text); }
+
+/* ---------- Botões ---------- */
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--raio-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao-primario {
+  background: var(--primary-950);
+  color: var(--neutral-0);
+}
+
+.botao-primario:hover {
+  background: var(--primary-800);
+}
+
+.botao-secundario {
+  background: var(--neutral-100);
+  color: var(--primary-950);
+}
+
+.botao-secundario:hover {
+  background: var(--neutral-200);
+}
+
+/* ---------- Telas estreitas ---------- */
+
+/*
+ * Abaixo de 900px o menu sai da lateral e vira só a barra da marca, em cima.
+ * A lista de sistemas não vem junto: no celular ela seria uma parede de
+ * 18 linhas entre a pessoa e o campo de busca. O filtro passa para a caixa
+ * "Sistema", ao lado da busca.
+ */
+@media (max-width: 900px) {
+  /*
+   * align-content: start porque a página tem altura mínima de uma tela
+   * inteira: com poucos resultados, a grade esticava a linha da marca para
+   * preencher o que sobrava, e abria um buraco em branco no topo.
+   */
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+  }
+
+  .menu {
+    position: static;
+    height: auto;
+    padding: var(--space-3) var(--space-4);
+    border-right: 0;
+    border-bottom: 1px solid var(--neutral-200);
+  }
+
+  .marca {
+    margin: 0;
+    padding: 0;
+  }
+
+  .marca-logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .menu-grupo {
+    display: none;
+  }
+
+  .conteudo {
+    padding: var(--space-4) var(--space-4) var(--space-10);
+  }
+
+  /*
+   * No celular o título repetiria a marca, que está logo acima, e empurraria
+   * a busca para baixo. Fica só a frase, que faz as vezes de rótulo do campo.
+   */
+  .cabecalho h1 {
+    display: none;
+  }
+
+  .cabecalho p {
+    font-size: 15px;
+    line-height: 22px;
+    color: var(--neutral-700);
+  }
+
+  /*
+   * A busca gruda no alto ao rolar: depois de descer uma lista comprida,
+   * ele não precisa voltar ao topo para procurar outra peça.
+   */
+  .busca {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: var(--space-2) calc(var(--space-4) * -1) var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: var(--neutral-50);
+    border-bottom: 1px solid var(--neutral-200);
+  }
+
+  .campo-termo label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .campo-sistema {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .campo-sistema select {
+    height: 40px;
+    font-size: 16px;
+  }
+}
+
+/*
+ * No celular a tabela vira uma lista de cartões: o código grande à
+ * esquerda, o nome e o sistema empilhados à direita. Três colunas
+ * espremidas em 360px quebrariam o nome da peça em quatro linhas.
+ */
+@media (max-width: 640px) {
+  .tabela thead {
+    display: none;
+  }
+
+  .tabela,
+  .tabela tbody {
+    display: block;
+  }
+
+  .tabela tbody tr {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "codigo componente"
+      "codigo sistema";
+    column-gap: var(--space-4);
+    row-gap: var(--space-1);
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--neutral-200);
+  }
+
+  .tabela tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .tabela td {
+    display: block;
+    padding: 0;
+    border: 0;
+    width: auto;
+  }
+
+  .col-codigo {
+    grid-area: codigo;
+    min-width: 64px;
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .col-componente {
+    grid-area: componente;
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 500;
+  }
+
+  .col-sistema {
+    grid-area: sistema;
+  }
+
+  .etiqueta {
+    font-size: 11px;
+    line-height: 16px;
+    padding: 1px 8px;
+  }
+}

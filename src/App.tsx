@@ -5,6 +5,7 @@ import { useListaGuardada } from "./lib/guardado";
 import { normalizar } from "./lib/texto";
 import { useVoz } from "./lib/voz";
 import { Alerta } from "./componentes/Alerta";
+import { BotaoAtalho } from "./componentes/BotaoAtalho";
 import { Marca } from "./componentes/Marca";
 import { IconeEstrela, TabelaDePecas } from "./componentes/TabelaDePecas";
 import { UltimasBuscas } from "./componentes/UltimasBuscas";
@@ -158,6 +159,7 @@ export function App() {
     <div className="app">
       <aside className="menu">
         <Marca total={pecas.length} />
+        <BotaoAtalho />
         {estado.tipo === "pronto" && (
           <nav className="menu-grupo" aria-label="Sistemas">
             <p className="menu-titulo">Sistemas</p>

@@ -26,6 +26,10 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["icone.svg", "icone-180.png"],
       manifest: {
+        // O "id" é a identidade do app instalado. Fixo, para que um atalho
+        // criado hoje continue sendo reconhecido como o mesmo app depois
+        // que nome, ícone ou endereço de início mudarem.
+        id: base,
         name: "Consulta de Peças - Amarildo Bragança",
         short_name: "Peças",
         description: "Busque a peça pelo código ou pelo nome do componente.",

@@ -12,8 +12,11 @@ com o dedo na folha impressa. Feito para usar no celular, na oficina.
 - **Últimas buscas:** as oito mais recentes, para repetir com um toque.
 - Filtro por sistema (Freio, Elétrico, Trem de Força…).
 - **Funciona sem internet** depois da primeira vez que abre.
-- Dá para pôr na tela inicial do celular, como um aplicativo
-  (no Chrome: menu ⋮ > "Adicionar à tela inicial").
+- **Botão "Criar atalho"** (no alto da tela): põe o app na tela inicial do
+  celular, ou na área de trabalho do computador. No Android com Chrome é
+  um toque; no iPhone a Apple não deixa o site fazer sozinho, e o botão
+  mostra o passo a passo pelo Compartilhar. Aberto pelo atalho, o botão
+  some.
 
 ## Como atualizar a lista
 

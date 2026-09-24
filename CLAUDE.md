@@ -40,6 +40,14 @@ nenhum projeto".
   "fala" simulada, senão o teste lê o campo antigo e acusa defeito que
   não existe (aconteceu).
 
+## Botão "Criar atalho" (v1.2.0)
+
+`src/lib/atalho.ts`. O `beforeinstallprompt` é escutado quando o arquivo
+carrega, não quando o botão monta: o Chrome dispara uma vez só, e quem não
+estiver ouvindo perde. iPhone não tem pedido nenhum (regra da Apple) — o
+botão abre o passo a passo. O `id` do manifesto é fixo (`base`): trocá-lo
+faz o celular tratar o atalho antigo como outro app.
+
 ## Os dados têm pegadinhas reais
 
 - **Código não é único.** 42 códigos aparecem em mais de um sistema, e 3

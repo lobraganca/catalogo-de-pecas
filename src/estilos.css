@@ -143,6 +143,105 @@ select {
   color: var(--neutral-400);
 }
 
+/* ---------- Botão "Criar atalho" e a explicação ---------- */
+
+.botao-atalho {
+  gap: var(--space-2);
+  width: 100%;
+  margin: calc(var(--space-4) * -1) 0 var(--space-6);
+}
+
+.botao-atalho svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.atalho-criado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 40px;
+  margin: calc(var(--space-4) * -1) 0 var(--space-6);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--success-border);
+  border-radius: var(--raio-md);
+  background: var(--success-bg);
+  color: var(--success-text);
+  font-weight: 600;
+}
+
+.atalho-criado svg {
+  width: 18px;
+  height: 18px;
+}
+
+.dialogo {
+  width: min(440px, calc(100vw - 32px));
+  padding: var(--space-6);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--raio-xl);
+  background: var(--neutral-0);
+  color: var(--neutral-700);
+  box-shadow: 0 24px 60px rgb(15 23 42 / 0.28);
+}
+
+.dialogo::backdrop {
+  background: rgb(15 23 42 / 0.45);
+}
+
+.dialogo h2 {
+  margin: 0 0 var(--space-4);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  color: var(--neutral-900);
+}
+
+.dialogo ol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  padding-left: var(--space-5);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.dialogo li::marker {
+  font-weight: 700;
+  color: var(--primary-950);
+}
+
+.dialogo strong {
+  color: var(--neutral-900);
+}
+
+.glifo {
+  font-size: 18px;
+}
+
+.icone-no-texto {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: -4px;
+  color: var(--primary-600);
+}
+
+.dialogo-nota {
+  margin-bottom: var(--space-5);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--neutral-500);
+}
+
+.dialogo .botao {
+  width: 100%;
+  height: 44px;
+}
+
 /* ---------- Menu ---------- */
 
 .menu-titulo {
@@ -747,9 +846,31 @@ mark {
     border-bottom: 1px solid var(--neutral-200);
   }
 
+  .menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
   .marca {
     margin: 0;
     padding: 0;
+    min-width: 0;
+  }
+
+  /*
+   * No celular o botão fica à direita da marca, sempre à vista, sem
+   * ocupar uma linha inteira acima da busca.
+   */
+  .botao-atalho,
+  .atalho-criado {
+    flex: none;
+    width: auto;
+    height: 38px;
+    margin: 0;
+    padding: 0 var(--space-3);
+    font-size: 13px;
   }
 
   .marca-logo {

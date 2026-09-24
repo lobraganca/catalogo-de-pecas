@@ -20,7 +20,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["icone.svg", "icone-180.png"],
       manifest: {
-        name: "Consulta de Peças",
+        name: "CONSULTA DE PEÇAS AMARILDO BRAGANÇA",
         short_name: "Peças",
         description: "Busque a peça pelo código ou pelo nome do componente.",
         lang: "pt-BR",

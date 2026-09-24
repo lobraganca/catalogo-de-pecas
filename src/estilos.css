@@ -251,10 +251,10 @@ select {
 
 .campo-lupa {
   position: absolute;
-  left: 14px;
-  width: 20px;
-  height: 20px;
-  color: var(--neutral-400);
+  left: 16px;
+  width: 22px;
+  height: 22px;
+  color: var(--neutral-500);
   pointer-events: none;
 }
 
@@ -276,7 +276,30 @@ select {
 }
 
 .campo input {
-  padding: 0 44px 0 44px;
+  padding: 0 48px 0 50px;
+}
+
+/*
+ * O campo de busca é a única coisa que se faz nesta tela, e a dona pediu
+ * que ele tivesse "mais profundidade": mais alto que os outros campos,
+ * borda mais firme e sombra, para saltar da página em vez de se misturar
+ * com ela. É o único ponto em que se foge do campo liso do padrão visual.
+ */
+.campo.campo-termo input {
+  height: 58px;
+  font-size: 18px;
+  border: 1.5px solid var(--neutral-300);
+  border-radius: var(--raio-lg);
+  box-shadow:
+    0 1px 2px rgb(15 23 42 / 0.06),
+    0 6px 16px rgb(15 23 42 / 0.1);
+}
+
+.campo.campo-termo input:focus {
+  border-color: var(--primary-600);
+  box-shadow:
+    0 0 0 4px rgb(15 132 204 / 0.18),
+    0 6px 16px rgb(15 23 42 / 0.12);
 }
 
 .campo input::placeholder {
@@ -302,11 +325,11 @@ select {
 
 .campo-limpar {
   position: absolute;
-  right: 6px;
+  right: 8px;
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border: 0;
   border-radius: var(--raio-md);
   background: none;

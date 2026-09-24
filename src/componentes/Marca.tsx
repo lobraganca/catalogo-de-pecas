@@ -1,6 +1,7 @@
 // A marca do topo do menu, no lugar onde o padrão põe logo + nome + versão.
-// É neutra de propósito: o padrão visual veio de outro sistema, e daquele
-// só se aproveitou a forma — nada do nome nem do logo.
+// O padrão visual veio de outro sistema, e dele só se aproveitou a forma —
+// nada do nome nem do logo de lá. O nome é o que a dona pediu, em
+// maiúsculas como ela escreveu.
 export function Marca({ total }: { total: number }) {
   return (
     <div className="marca">
@@ -16,7 +17,7 @@ export function Marca({ total }: { total: number }) {
         <circle cx="32" cy="32" r="8" fill="none" stroke="#fff" strokeWidth="5" />
       </svg>
       <div>
-        <p className="marca-nome">Consulta de Peças</p>
+        <p className="marca-nome">CONSULTA DE PEÇAS AMARILDO BRAGANÇA</p>
         <p className="marca-versao">
           v1.0.0{total > 0 && ` · ${total.toLocaleString("pt-BR")} peças`}
         </p>

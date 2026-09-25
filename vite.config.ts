@@ -34,7 +34,7 @@ export default defineConfig({
         short_name: "Peças",
         description: "Busque a peça pelo código ou pelo nome do componente.",
         lang: "pt-BR",
-        theme_color: "#395A86",
+        theme_color: "#073a5c",
         background_color: "#f8fafc",
         display: "standalone",
         icons: [

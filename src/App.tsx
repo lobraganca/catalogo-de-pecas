@@ -158,7 +158,7 @@ export function App() {
   return (
     <div className="app">
       <aside className="menu">
-        <Marca total={pecas.length} />
+        <Marca />
         <BotaoAtalho />
         {estado.tipo === "pronto" && (
           <nav className="menu-grupo" aria-label="Sistemas">
@@ -377,6 +377,8 @@ export function App() {
             </section>
           </div>
         )}
+
+        <footer className="rodape">Versão {__VERSAO__}</footer>
       </main>
     </div>
   );

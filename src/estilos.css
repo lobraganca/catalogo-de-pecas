@@ -97,6 +97,12 @@ select {
   min-height: 100vh;
 }
 
+/*
+ * A barra (lateral no computador, de cima no celular) em azul-marinho
+ * escuro, a pedido da dona — o primary-900 da paleta. O padrão original
+ * tem a barra branca; daqui para baixo, tudo o que fica DENTRO dela usa
+ * texto claro sobre o escuro.
+ */
 .menu {
   position: sticky;
   top: 0;
@@ -104,8 +110,8 @@ select {
   height: 100vh;
   overflow-y: auto;
   padding: var(--space-8) var(--space-4) var(--space-6);
-  background: var(--neutral-0);
-  border-right: 1px solid var(--neutral-200);
+  background: var(--primary-900);
+  color: var(--neutral-0);
 }
 
 .conteudo {
@@ -134,13 +140,21 @@ select {
   font-size: 14px;
   line-height: 20px;
   font-weight: 600;
-  color: var(--neutral-900);
+  color: var(--neutral-0);
 }
 
-.marca-versao {
+/* O logo é azul sobre azul: um contorno claro o separa da barra. */
+.marca-logo {
+  border-radius: 9px;
+  box-shadow: 0 0 0 1.5px rgb(255 255 255 / 0.22);
+}
+
+.rodape {
+  margin-top: var(--space-10);
   font-size: 12px;
   line-height: 16px;
   color: var(--neutral-400);
+  text-align: center;
 }
 
 /* ---------- Botão "Criar atalho" e a explicação ---------- */
@@ -149,6 +163,15 @@ select {
   gap: var(--space-2);
   width: 100%;
   margin: calc(var(--space-4) * -1) 0 var(--space-6);
+}
+
+.menu .botao-atalho {
+  background: rgb(255 255 255 / 0.14);
+  color: var(--neutral-0);
+}
+
+.menu .botao-atalho:hover {
+  background: rgb(255 255 255 / 0.22);
 }
 
 .botao-atalho svg {
@@ -252,7 +275,7 @@ select {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--neutral-400);
+  color: rgb(255 255 255 / 0.55);
 }
 
 /* A área de toque ocupa a largura toda, e não só o texto. */
@@ -270,28 +293,37 @@ select {
   font-size: 13px;
   line-height: 18px;
   text-align: left;
-  color: var(--neutral-600);
+  color: rgb(255 255 255 / 0.8);
   cursor: pointer;
 }
 
 .menu-item:hover {
-  background: var(--neutral-50);
-  color: var(--neutral-900);
+  background: rgb(255 255 255 / 0.08);
+  color: var(--neutral-0);
 }
 
-/* A cor sozinha não basta para marcar o ativo: fundo + cor + peso. */
+/*
+ * A cor sozinha não basta para marcar o ativo: fundo + cor + peso, como
+ * no padrão — só que em claro sobre escuro.
+ */
 .menu-item-ativo,
 .menu-item-ativo:hover {
-  background: var(--neutral-100);
-  color: var(--primary-700);
+  background: rgb(255 255 255 / 0.16);
+  color: var(--neutral-0);
   font-weight: 600;
 }
 
 .menu-quantidade {
   font-size: 12px;
   font-weight: 400;
-  color: var(--neutral-400);
+  color: rgb(255 255 255 / 0.5);
   font-variant-numeric: tabular-nums;
+}
+
+/* Contorno de foco branco: o azul do resto da página sumiria na barra. */
+.menu .menu-item:focus-visible,
+.menu .botao-atalho:focus-visible {
+  outline-color: var(--neutral-0);
 }
 
 .menu-item:focus-visible,
@@ -842,8 +874,6 @@ mark {
     position: static;
     height: auto;
     padding: var(--space-3) var(--space-4);
-    border-right: 0;
-    border-bottom: 1px solid var(--neutral-200);
   }
 
   .menu {

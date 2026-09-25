@@ -66,6 +66,11 @@ nomes do PDF no topo de `src/estilos.css`: primária `#395A86`, neutros
 slate, Inter, base 14px, espaçamento múltiplo de 4, raios 6/8/12/16.
 Menu lateral fixo acima de 900px; abaixo disso vira uma caixa "Sistema".
 
+Desvios do padrão pedidos pela dona: barra (lateral e de cima) em
+azul-marinho escuro `#073a5c` (primary-900) com texto claro, e não branca;
+sem versão nem contagem debaixo do nome — a versão foi para o rodapé.
+O campo de busca é mais alto e com sombra ("mais profundidade").
+
 ## Comandos
 
 ```bash
